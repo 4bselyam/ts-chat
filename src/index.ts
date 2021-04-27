@@ -1,5 +1,5 @@
 import bodyParser from "body-parser";
-import express, { Application, Request, Response } from "express";
+import express, { Application } from "express";
 
 import connect from "./connect";
 import * as UserController from "./controllers/user.controller";
