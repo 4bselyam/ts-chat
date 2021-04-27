@@ -1,18 +1,27 @@
 import bodyParser from "body-parser";
 import express, { Application } from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
-import connect from "./connect";
-import * as UserController from "./controllers/user.controller";
+import { UserController } from "./controllers";
 
 const app: Application = express();
-const PORT: number = 3000 || process.env.PORT;
-const db: string = "mongodb+srv://4bselyam:a08102001@cluster0.iwdpr.mongodb.net/chat?retryWrites=true&w=majority";
+dotenv.config();
 
-connect(db);
+mongoose.connect("mongodb+srv://4bselyam:a08102001@cluster0.iwdpr.mongodb.net/chat?retryWrites=true&w=majority", {
+	useNewUrlParser: true,
+	useUnifiedTopology: true,
+	useCreateIndex: true,
+	useFindAndModify: true
+});
 app.use(bodyParser.json());
 
-app.post("/create", UserController.addUser);
+const User = new UserController();
 
-app.listen(PORT, () => {
-	console.log(`[Server has been started on port ${PORT}...]`);
+app.get("/user/:id", User.show);
+app.post("/user/register", User.create);
+app.delete("/user/:id", User.delete);
+
+app.listen(process.env.PORT, () => {
+	console.log(`[Server has been started on port ${process.env.PORT}...]`);
 });
