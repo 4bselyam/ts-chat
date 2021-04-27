@@ -5,10 +5,10 @@ export default (db: string) => {
 		mongoose
 			.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
 			.then(() => {
-				return console.log(`[Successfully connected to database]`);
+				return console.log(`[Successfully connected to database...]`);
 			})
 			.catch((error) => {
-				console.log(`[An error occured while connecting to database: ${error}]`);
+				console.log(`[An error occured while connecting to database: ${error}...]`);
 				return process.exit(1);
 			});
 	};

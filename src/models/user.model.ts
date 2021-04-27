@@ -3,7 +3,6 @@ import isEmail from "validator";
 
 export interface UserInterface extends Document {
 	email: string;
-	avatar: string;
 	fullname: string;
 	password: string;
 }
@@ -13,7 +12,7 @@ const UserSchema: Schema = new Schema(
 		email: {
 			type: String,
 			required: "Email address is required",
-			validate: [isEmail, "Invalid email"],
+			validator: [isEmail, "Invalid email"],
 			unique: true
 		},
 		avatar: String,

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import UserModel from "../models/user.schema";
+import UserModel from "../models/user.model";
 
 export const addUser = (req: Request, res: Response) => {
 	const data: object = {
