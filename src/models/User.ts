@@ -11,6 +11,7 @@ export interface IUser extends Document {
 	last_seen: Date;
 }
 
+// TODO: сделать время последнего захода
 const UserSchema: Schema = new Schema(
 	{
 		email: {

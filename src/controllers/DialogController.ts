@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { DialogModel } from "../models";
+import { DialogModel, MessageModel } from "../models";
 
 class DialogController {
 	index(req: Request, res: Response) {
-		const authorId: string = req.params.id;
+		const authorId: string = "608935da0bb5566d7f1688a8";
 
 		DialogModel.find({ author: authorId })
 			.populate(["author", "partner"])
@@ -23,8 +23,19 @@ class DialogController {
 
 		dialog
 			.save()
-			.then((obj: object) => res.json(obj))
-			.catch((reason) => res.json(reason.message));
+			.then((dialogObj: any) => {
+				const message = new MessageModel({
+					text: req.body.text,
+					user: req.body.author,
+					dialog: dialogObj._id
+				});
+
+				message
+					.save()
+					.then(() => res.json({ dialog: dialogObj }))
+					.catch((reason) => res.json(reason));
+			})
+			.catch((reason) => res.json(reason));
 	}
 
 	delete(req: Request, res: Response) {

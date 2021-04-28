@@ -4,7 +4,8 @@
 	"description": "Simple TypeScript Chat",
 	"main": "index.js",
 	"scripts": {
-		"start": "ts-node src/index.ts"
+		"start": "ts-node src/index.ts",
+		"watch": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/index.ts"
 	},
 	"author": "Ahmed Valyaev <4bselyam@gmail.com>",
 	"license": "ISC",
@@ -18,6 +19,7 @@
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
 		"mongoose": "^5.12.5",
+		"nodemon": "^2.0.7",
 		"socket.io": "^4.0.1",
 		"typescript": "^4.2.4",
 		"validator": "^13.6.0"
