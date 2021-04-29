@@ -1,16 +1,18 @@
 import { Request, Response } from "express";
-import { DialogModel, MessageModel } from "../models";
+import { DialogModel, MessageModel, UserModel } from "../models";
 
 class DialogController {
-	index(req: Request, res: Response) {
-		const authorId: string = "608935da0bb5566d7f1688a8";
+	index(req: any, res: Response) {
+		const user = UserModel.findOne({ email: req.user.email }).exec();
 
-		DialogModel.find({ author: authorId })
-			.populate(["author", "partner"])
-			.exec(function (err, dialogs) {
-				if (err || dialogs === null) return res.status(404).json({ message: "Dialogs are empty" });
-				return res.json(dialogs);
-			});
+		user.then((doc) => {
+			DialogModel.find({ author: doc?._id })
+				.populate(["author", "partner"])
+				.exec(function (err, dialogs) {
+					if (err || dialogs === null) return res.status(404).json({ message: "Dialogs are empty" });
+					return res.json(dialogs);
+				});
+		}).catch((err) => res.json({ message: err }));
 	}
 
 	create(req: Request, res: Response) {
@@ -33,7 +35,7 @@ class DialogController {
 				message
 					.save()
 					.then(() => res.json({ dialog: dialogObj }))
-					.catch((reason) => res.json(reason));
+					.catch((err) => res.json({ message: err }));
 			})
 			.catch((reason) => res.json(reason));
 	}

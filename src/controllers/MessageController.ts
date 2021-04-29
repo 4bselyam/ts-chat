@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { MessageModel } from "../models";
+import { MessageModel, UserModel } from "../models";
 
 class MessageController {
 	index(req: Request, res: Response) {
@@ -12,20 +12,25 @@ class MessageController {
 				return res.json(dialogs);
 			});
 	}
-	create(req: Request, res: Response) {
-		const userId = "608935da0bb5566d7f1688a8";
-		const postData: object = {
-			text: req.body.text,
-			user: userId,
-			dialog: req.body.dialog_id
-		};
 
-		const message = new MessageModel(postData);
+	create(req: any, res: Response) {
+		const user = UserModel.findOne({ email: req.user.email }).exec();
+		user.then((doc) => {
+			const postData: object = {
+				text: req.body.text,
+				user: doc?._id,
+				dialog: req.body.dialog_id
+			};
 
-		message
-			.save()
-			.then((obj: object) => res.json(obj))
-			.catch((reason) => res.json(reason.message));
+			const message = new MessageModel(postData);
+
+			message
+				.save()
+				.then((obj: object) => res.json(obj))
+				.catch((reason) => res.json(reason.message));
+		}).catch((err) => {
+			res.json({ message: err });
+		});
 	}
 
 	delete(req: Request, res: Response) {

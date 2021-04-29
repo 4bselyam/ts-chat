@@ -8,11 +8,11 @@ export default (req: any, res: Response, next: NextFunction) => {
 	const token = req.headers.token;
 
 	verifyJWTToken(token)
-		.then((user) => {
-			req.user = user;
+		.then((user: any) => {
+			req.user = user.data;
 			next();
 		})
-		.catch(err => {
-			res.status(400).json({ message: "Invalid auth token provided" });
+		.catch((err) => {
+			res.status(403).json({ message: "Invalid auth token provided" });
 		});
 };

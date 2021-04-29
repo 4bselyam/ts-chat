@@ -15,8 +15,9 @@ class UserController {
 		});
 	}
 
-	getMe(req: Request, res: Response) {
-		// TODO: Сделать возвращение информации про самого себя (что-то вроде аутентификации )
+	getMe(req: any, res: Response) {
+		const user = UserModel.findOne({ email: req.user.email }).exec();
+		user.then((doc) => res.json(doc)).catch((err) => res.json({ message: err }));
 	}
 
 	create(req: Request, res: Response) {
