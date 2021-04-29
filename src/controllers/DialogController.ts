@@ -1,7 +1,15 @@
 import { Request, Response } from "express";
+import socket from "socket.io";
+
 import { DialogModel, MessageModel, UserModel } from "../models";
 
 class DialogController {
+	io: socket.Server;
+
+	constructor(io: socket.Server) {
+		this.io = io;
+	}
+
 	index(req: any, res: Response) {
 		const user = UserModel.findOne({ email: req.user.email }).exec();
 
@@ -15,7 +23,7 @@ class DialogController {
 		}).catch((err) => res.json({ message: err }));
 	}
 
-	create(req: Request, res: Response) {
+	create = (req: Request, res: Response) => {
 		const postData: object = {
 			author: req.body.author,
 			partner: req.body.partner
@@ -38,16 +46,16 @@ class DialogController {
 					.catch((err) => res.json({ message: err }));
 			})
 			.catch((reason) => res.json(reason));
-	}
+	};
 
-	delete(req: Request, res: Response) {
+	delete = (req: Request, res: Response) => {
 		const id: string = req.params.id;
 		DialogModel.findOneAndRemove({ _id: id })
 			.then((dialog) => {
 				if (dialog) res.json({ message: "Dialog was deleted" });
 			})
 			.catch(() => res.json({ message: "Dialog not found" }));
-	}
+	};
 }
 
 export default DialogController;

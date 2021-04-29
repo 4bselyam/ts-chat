@@ -1,7 +1,15 @@
 import { Request, Response } from "express";
+import socket from "socket.io";
+
 import { MessageModel, UserModel } from "../models";
 
 class MessageController {
+	io: socket.Server;
+
+	constructor(io: socket.Server) {
+		this.io = io;
+	}
+
 	index(req: Request, res: Response) {
 		const dialogId = req.query.dialog;
 
@@ -13,7 +21,7 @@ class MessageController {
 			});
 	}
 
-	create(req: any, res: Response) {
+	create = (req: any, res: Response) => {
 		const user = UserModel.findOne({ email: req.user.email }).exec();
 		user.then((doc) => {
 			const postData: object = {
@@ -26,21 +34,27 @@ class MessageController {
 
 			message
 				.save()
-				.then((obj: object) => res.json(obj))
+				.then((obj: any) => {
+					obj.populate("dialog", (err: any, message: any) => {
+						if (err) return res.status(500).json({ message: err });
+						res.json(message);
+						this.io.emit("SERVER:NEW_MESSAGE", message);
+					});
+				})
 				.catch((reason) => res.json(reason.message));
 		}).catch((err) => {
 			res.json({ message: err });
 		});
-	}
+	};
 
-	delete(req: Request, res: Response) {
+	delete = (req: Request, res: Response) => {
 		const id: string = req.params.id;
 		MessageModel.findOneAndRemove({ _id: id })
 			.then((message) => {
 				if (message) res.json({ message: "Message was deleted" });
 			})
 			.catch(() => res.json({ message: "Message not found" }));
-	}
+	};
 }
 
 export default MessageController;
