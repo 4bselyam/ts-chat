@@ -95,7 +95,7 @@ class UserController {
             subject: "Подтверждение почты React Chat Tutorial",
             html: `Для того, чтобы подтвердить почту, перейдите <a href="http://localhost:3000/signup/verify?hash=${obj.confirm_hash}">по этой ссылке</a>`
           },
-          function (err, info) {
+          function (err: any, info: any) {
             if (err) {
               console.log(err);
             } else {
