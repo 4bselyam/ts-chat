@@ -1,6 +1,5 @@
 import express from "express";
 import dotenv from "dotenv";
-import {Server} from "socket.io";
 import {createServer} from "http";
 
 import "./core/db";
@@ -12,8 +11,9 @@ const http = createServer(app);
 const io = createSocket(http);
 
 dotenv.config();
+
 createRoutes(app, io);
 
-http.listen(process.env.PORT, () => {
-  console.log(`[Server has started on http://localhost:${process.env.PORT}...]`);
+http.listen(process.env.PORT, function () {
+  console.log(`Server: http://localhost:${process.env.PORT}`);
 });

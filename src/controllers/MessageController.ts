@@ -11,7 +11,7 @@ class MessageController {
   }
 
   index = (req: express.Request, res: express.Response) => {
-    const dialogId = req.query.dialog;
+    const dialogId: string = req.query.dialog;
 
     MessageModel.find({dialog: dialogId})
       .populate(["dialog", "user"])

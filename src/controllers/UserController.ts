@@ -12,18 +12,10 @@ class UserController {
   constructor(io: socket.Server) {
     this.io = io;
   }
-  // TODO: В конструкторе следить за методоами сокета относящихся к юзеру и вызывать соотв. методы
-  // constructor() {
-  //   io.on("connection", function(socket: any) {
-  //     socket.on('', function(obj: any) {
-  //       // Вызывать метод для создания сущности
-  //     })
-  //   });
-  // }
 
   show = (req: express.Request, res: express.Response) => {
     const id: string = req.params.id;
-    UserModel.findById(id, (err: any, user: any) => {
+    UserModel.findById(id, (err, user) => {
       if (err) {
         return res.status(404).json({
           message: "User not found"
@@ -35,7 +27,7 @@ class UserController {
 
   getMe = (req: any, res: express.Response) => {
     const id: string = req.user._id;
-    UserModel.findById(id, (err: any, user: any) => {
+    UserModel.findById(id, (err, user: any) => {
       if (err || !user) {
         return res.status(404).json({
           message: "User not found"
@@ -91,38 +83,35 @@ class UserController {
   };
 
   verify = (req: express.Request, res: express.Response) => {
-    const hash = req.query.hash?.toString();
+    const hash = req.query.hash;
 
     if (!hash) {
       return res.status(422).json({errors: "Invalid hash"});
     }
 
-    UserModel.findOne(
-      {confirm_hash: hash},
-      (err: any, user: {confirmed: boolean; save: (arg0: (err: any) => express.Response<any, Record<string, any>> | undefined) => void}) => {
-        if (err || !user) {
+    UserModel.findOne({confirm_hash: hash}, (err, user) => {
+      if (err || !user) {
+        return res.status(404).json({
+          status: "error",
+          message: "Hash not found"
+        });
+      }
+
+      user.confirmed = true;
+      user.save(err => {
+        if (err) {
           return res.status(404).json({
             status: "error",
-            message: "Hash not found"
+            message: err
           });
         }
 
-        user.confirmed = true;
-        user.save((err: any) => {
-          if (err) {
-            return res.status(404).json({
-              status: "error",
-              message: err
-            });
-          }
-
-          res.json({
-            status: "success",
-            message: "Аккаунт успешно подтвержден!"
-          });
+        res.json({
+          status: "success",
+          message: "Аккаунт успешно подтвержден!"
         });
-      }
-    );
+      });
+    });
   };
 
   login = (req: express.Request, res: express.Response) => {
@@ -137,7 +126,7 @@ class UserController {
       return res.status(422).json({errors: errors.array()});
     }
 
-    UserModel.findOne({email: postData.email}, (err: any, user: any) => {
+    UserModel.findOne({email: postData.email}, (err, user: any) => {
       if (err || !user) {
         return res.status(404).json({
           message: "User not found"

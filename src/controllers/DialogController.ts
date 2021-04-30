@@ -1,7 +1,7 @@
-import {Request, Response} from "express";
+import express from "express";
 import socket from "socket.io";
 
-import {DialogModel, MessageModel, UserModel} from "../models";
+import {DialogModel, MessageModel} from "../models";
 
 class DialogController {
   io: socket.Server;
@@ -10,7 +10,7 @@ class DialogController {
     this.io = io;
   }
 
-  index = (req: any, res: Response) => {
+  index = (req: any, res: express.Response) => {
     const userId = req.user._id;
 
     DialogModel.find()
@@ -32,9 +32,9 @@ class DialogController {
       });
   };
 
-  create = (req: Request, res: Response) => {
-    const postData: object = {
-      author: req.body.author,
+  create = (req: express.Request, res: express.Response) => {
+    const postData = {
+      author: req.user._id,
       partner: req.body.partner
     };
 
@@ -61,18 +61,30 @@ class DialogController {
               });
             });
           })
-          .catch(err => res.json({message: err}));
+          .catch(reason => {
+            res.json(reason);
+          });
       })
-      .catch(reason => res.json(reason));
+      .catch(reason => {
+        res.json(reason);
+      });
   };
 
-  delete = (req: Request, res: Response) => {
+  delete = (req: express.Request, res: express.Response) => {
     const id: string = req.params.id;
     DialogModel.findOneAndRemove({_id: id})
       .then(dialog => {
-        if (dialog) res.json({message: "Dialog was deleted"});
+        if (dialog) {
+          res.json({
+            message: `Dialog deleted`
+          });
+        }
       })
-      .catch(() => res.json({message: "Dialog not found"}));
+      .catch(() => {
+        res.json({
+          message: `Dialog not found`
+        });
+      });
   };
 }
 
