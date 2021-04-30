@@ -4,11 +4,11 @@ import {generatePasswordHash} from "../utils";
 import differenceInMinutes from "date-fns/difference_in_minutes";
 
 export interface IUser extends Document {
-  email?: string;
-  fullname?: string;
-  password?: string;
-  confirmed?: boolean;
-  avatar?: string;
+  email: string;
+  fullname: string;
+  password: string;
+  confirmed: boolean;
+  avatar: string;
   confirm_hash?: string;
   last_seen?: Date;
 }
@@ -53,22 +53,15 @@ UserSchema.set("toJSON", {
   virtuals: true
 });
 
-UserSchema.pre("save", function (next) {
-  const user: IUser = this;
+UserSchema.pre("save", async function (next) {
+  const user: any = this;
 
-  if (!user.isModified("password")) return next();
+  if (!user.isModified("password")) {
+    return next();
+  }
 
-  generatePasswordHash(user.password)
-    .then(hash => {
-      user.password = String(hash);
-      generatePasswordHash(+new Date()).then(confirmHash => {
-        user.confirm_hash = String(confirmHash);
-        next();
-      });
-    })
-    .catch(err => {
-      next(err);
-    });
+  user.password = await generatePasswordHash(user.password);
+  user.confirm_hash = await generatePasswordHash(new Date().toString());
 });
 
 const UserModel = mongoose.model<IUser>("User", UserSchema);
