@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
-import { Server } from "socket.io";
-import { createServer } from "http";
+import {Server} from "socket.io";
+import {createServer} from "http";
 
 import "./core/db";
 import createRoutes from "./core/routes";
@@ -15,5 +15,5 @@ dotenv.config();
 createRoutes(app, io);
 
 http.listen(process.env.PORT, () => {
-	console.log(`[Server has started on http://localhost:${process.env.PORT}...]`);
+  console.log(`[Server has started on http://localhost:${process.env.PORT}...]`);
 });
