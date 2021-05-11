@@ -1,9 +1,9 @@
 export class CreateMessageRepositoryRequest {
   constructor(
     public readonly text: string,
-    public readonly dialog: string,
+    public readonly dialog_id: string,
     public readonly attachments: string,
-    public readonly user: string
+    public readonly user_id: string
   ) {}
 }
 
@@ -16,8 +16,5 @@ export class GetMessagesRequest {
 }
 
 export class UpdateReadedStatusMessageRequest {
-  constructor(
-    public readonly userId: string,
-    public readonly dialogId: string
-  ) {}
+  constructor(public readonly userId: string, public readonly dialogId: string) {}
 }

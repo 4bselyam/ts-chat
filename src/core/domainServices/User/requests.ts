@@ -14,6 +14,6 @@ export class GetMeRepositoryRequest {
   constructor(public readonly id: string) {}
 }
 
-// export class GetUsersRepositoryRequest {
-//   constructor(public readonly id: string) {}
-// }
+export class GetUsersRepositoryRequest {
+  constructor(public readonly query: string) {}
+}

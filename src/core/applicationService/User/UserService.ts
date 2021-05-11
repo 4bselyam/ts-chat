@@ -1,16 +1,12 @@
 import {User} from "../../domain/User/User";
 import {IUserRepository} from "../../domainServices/User/IUserRepository";
-import {
-  DeleteUserRepositoryRequest,
-  GetMeRepositoryRequest,
-  CreateUserRepositoryRequest
-} from "../../domainServices/User/requests";
+import {DeleteUserRepositoryRequest, GetMeRepositoryRequest, CreateUserRepositoryRequest} from "../../domainServices/User/requests";
 import {IUserService} from "./IUserService";
 
 export class UserService implements IUserService {
   constructor(private readonly userRepository: IUserRepository) {}
 
-  removeUser({id}: DeleteUserRepositoryRequest) {
+  removeUser({id}: DeleteUserRepositoryRequest): Promise<User> | void {
     return this.userRepository.delete(new DeleteUserRepositoryRequest(id));
   }
 

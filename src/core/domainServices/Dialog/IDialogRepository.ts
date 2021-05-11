@@ -8,6 +8,6 @@ import {
 
 export interface IDialogRepository {
   index(res: GetDialogRequest): Promise<Dialog> | void;
-  create(res: CreateDialogRepositoryRequest): Promise<Dialog> | void;
+  create(res: CreateDialogRepositoryRequest): Promise<Dialog> | void | string;
   delete(res: DeleteDialogRepositoryRequest): Promise<Dialog> | void;
 }

@@ -3,9 +3,9 @@ export interface User {
   email: string;
   fullname: string;
   password: string;
-  confirmed: string;
+  confirmed: boolean;
   avatar: string;
-  confirm_hash?: number;
+  confirm_hash?: string;
   last_seen?: Date;
   createdAt?: Date;
   updatedAt?: Date;
