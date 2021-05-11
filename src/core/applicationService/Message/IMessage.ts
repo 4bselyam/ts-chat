@@ -18,7 +18,7 @@ interface CreateMsgReq {
 }
 
 export interface IMessage {
-  updateReadedStatus(userId: string, dialog: string): void;
+  updateReadedStatus(req: any, res: any, userId: string, dialog: string): void;
   index(req: FindMsgReq, res: any): Promise<Message>;
   create(req: CreateMsgReq, res: any): Promise<Message>;
   delete(req: DeleteMsgReq, res: any): Promise<Message>;
