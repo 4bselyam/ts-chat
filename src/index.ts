@@ -8,7 +8,7 @@ import './core/db';
 import createRoutes from './core/routes';
 import createSocket from './core/socket';
 
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 3005;
 const app = express();
 const http = createServer(app);
 const io = createSocket(http);
