@@ -16,5 +16,5 @@ const io = createSocket(http);
 createRoutes(app, io);
 
 http.listen(PORT, function () {
-  console.log(`Server is running on URL: http://localhost:${PORT}`);
+  console.log(`Server: http://localhost:${PORT}`);
 });
