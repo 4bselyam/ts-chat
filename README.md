@@ -1,5 +1,3 @@
-## АХТУНГ! ALARM! ВНИМАНИЕ!
+# TypeScript Chat
 
-Нужно установить MongoDB локально, так как я юзал локальную БД.
-
-Some dumb stuff
+This chat was created in education purposes. Tried to build backend via Onion Architecture. It's not finished. Some day I'll finish it...
